@@ -15,7 +15,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: '08b9814aab38122da282b93fb411aa76',
-  baseURL: 'http://localhost:3000',
+  baseURL: 'https://foragers-scrapbook.azurewebsites.net',
   clientID: 'xWISM584Cwu5EcvXlvfGLisVvLoiXl9S',
   issuerBaseURL: 'https://dev-u15cfnmqexzcnfbq.us.auth0.com'
 };
