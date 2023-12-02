@@ -21,13 +21,11 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="userID" class="form-label">User Id</label>
-                            <input type="string" class="form-control" id="userID">
+                            <input type="hidden" class="form-control" id="userID" value={{user.sub}}>
                         </div>
 
                         <div class="mb-3">
-                            <label for="userName" class="form-label">User Name</label>
-                            <input type="text" class="form-control" id="userName">
+                            <input type="hidden" class="form-control" id="userName" value={{user.nickname}}>
                         </div>
 
                         <div class="mb-3">
@@ -46,4 +44,21 @@
 
         <div class="col-2"></div>
     </div>
+
+
+</div>
+
+<div class="row align-items-start">
+    <div class="col-2"></div>
+
+    <div class="col-8 masonry-container" style="text-align: left;">
+
+        <div id="MyMediaList">
+
+            <h4>Error loading the media.</h4>
+
+        </div>
+    </div>
+
+    <div class="col-2"></div>
 </div>

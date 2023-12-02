@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const { auth } = require('express-openid-connect');
+Handlebars = require('hbs');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,9 +17,14 @@ const config = {
   auth0Logout: true,
   secret: '08b9814aab38122da282b93fb411aa76',
   baseURL: 'https://foragers-scrapbook.azurewebsites.net',
+  //baseURL: 'http://localhost:3000/',
   clientID: 'xWISM584Cwu5EcvXlvfGLisVvLoiXl9S',
   issuerBaseURL: 'https://dev-u15cfnmqexzcnfbq.us.auth0.com'
 };
+
+Handlebars.registerHelper('json', function(context) {
+  return JSON.stringify(context);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

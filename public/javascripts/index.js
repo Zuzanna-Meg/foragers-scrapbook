@@ -10,6 +10,8 @@ $(document).ready(function () {
   //Run the get asset list function
   getImages();
 
+  getMyImages();
+
   //Handler for the new asset submission button
   $("#subNewForm").click(function () {
 
@@ -21,6 +23,8 @@ $(document).ready(function () {
 
 //A function to submit a new asset to the REST endpoint 
 function submitNewAsset() {
+
+  document.querySelector('#subNewForm').disabled = true;
 
   //Create a form data object
   submitData = new FormData();
@@ -41,6 +45,8 @@ function submitNewAsset() {
     processData: false,
     type: 'POST',
     success: function (data) {
+      alert("Media Uploaded!");
+      location.reload();
     }
   });
 
@@ -77,5 +83,57 @@ function getImages() {
     }).appendTo("#ImageList");
   });
 
+}
+
+function getMyImages() {
+
+  //Replace the current HTML in that div with a loading message
+  $('#MyMediaList').html('<div class="spinner-border" role="status"><span class="sr-only"> </span > ');
+
+  $.getJSON(RAI, function (data) {
+
+    //Create an array to hold all the retrieved assets
+    var items = [];
+    var userid = window.userid;
+
+    //Iterate through the returned records and build HTML, incorporating the key values of the record in the data
+    $.each(data, function (key, val) {
+      if (userid === val["userID"]) {
+        items.push("<div class='masonry-item card text-dark bg-light mb-3 p-1 m-2' style='width: 18rem;'>");
+        items.push("<embed src='" + BLOB_ACCOUNT + val["filePath"] + "' class='card-img-top'>")
+        items.push("<div class='card-body'><h5 class='card-title'>" + val["fileName"] + "</h5>");
+        items.push("<button type='button' id='" + val["id"] + "' class='btn btn-danger' onclick='deleteMedia(\"" + val["id"] + "\")'>Delete</button>")
+        items.push("</div></div>");
+      }
+
+    });
+
+    //Clear the assetlist div
+    $('#MyMediaList').empty();
+
+    //Append the contents of the items array to the MyMediaList Div
+    $("<ul/>", {
+      "class": "my-new-list",
+      html: items.join("")
+    }).appendTo("#MyMediaList");
+  });
+
+}
+
+function deleteMedia(id) {
+
+  document.querySelector("#"+id).disabled = true;
+
+  var deleteUrl = "https://prod-07.eastus.logic.azure.com/workflows/189ecd4d912440648440329d8a1b4eec/triggers/request/paths/invoke/api/v1/media/"
+    + id + "?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=1quXjPUU-yvSKoNKFgEX05k2Ths5_B95iBk9C8N_A7M"
+
+  $.ajax({
+    url: deleteUrl,
+    type: 'DELETE',
+    success: function (data) {
+      alert("Media Deleted!");
+      location.reload();
+    }
+  });
 }
 
