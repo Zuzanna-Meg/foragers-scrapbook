@@ -1,6 +1,9 @@
 //The URIs of the REST endpoint
 IUPS = "https://prod-45.eastus.logic.azure.com/workflows/d0ec84ed986f46c2af3b7895d447df3f/triggers/request/paths/invoke/api/v1/media?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=kP8teSNe9A_HE-0qngmtPZHc6-x3HkC9rijJr0DTrw8";
 RAI = "https://prod-10.eastus.logic.azure.com/workflows/a28f3407b1254bbcb14e2989ef07e373/triggers/request/paths/invoke/api/v1/media?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=27fIJom0NYBOTPONkI7Uy9rCl92gSIYWWC9nbipvD_M";
+DEL1 = "https://prod-07.eastus.logic.azure.com/workflows/189ecd4d912440648440329d8a1b4eec/triggers/request/paths/invoke/api/v1/media/"
+DEL2 = "?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=1quXjPUU-yvSKoNKFgEX05k2Ths5_B95iBk9C8N_A7M"
+
 
 BLOB_ACCOUNT = "https://com682blobstoragezm.blob.core.windows.net";
 
@@ -62,6 +65,7 @@ function getImages() {
 
     //Create an array to hold all the retrieved assets
     var items = [];
+    var admin = window.admin;
 
     //Iterate through the returned records and build HTML, incorporating the key values of the record in the data
     $.each(data, function (key, val) {
@@ -69,6 +73,9 @@ function getImages() {
       items.push("<embed src='" + BLOB_ACCOUNT + val["filePath"] + "' class='card-img-top'>")
       items.push("<div class='card-body'><h5 class='card-title'>" + val["fileName"] + "</h5>");
       items.push("<p class='card-text'>Uploaded by: " + val["userName"] + "</p>");
+      if (admin){
+        items.push("<button type='button' id='" + val["id"] + "' class='btn btn-danger' onclick='deleteMedia(\"" + val["id"] + "\")'>Delete</button>")
+      }
       items.push("</div></div>");
 
     });
@@ -124,8 +131,7 @@ function deleteMedia(id) {
 
   document.querySelector("#"+id).disabled = true;
 
-  var deleteUrl = "https://prod-07.eastus.logic.azure.com/workflows/189ecd4d912440648440329d8a1b4eec/triggers/request/paths/invoke/api/v1/media/"
-    + id + "?api-version=2016-10-01&sp=%2Ftriggers%2Frequest%2Frun&sv=1.0&sig=1quXjPUU-yvSKoNKFgEX05k2Ths5_B95iBk9C8N_A7M"
+  var deleteUrl = DEL1 + id + DEL2
 
   $.ajax({
     url: deleteUrl,
